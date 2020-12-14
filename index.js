@@ -15,26 +15,24 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.get("/", (req, res) => {
-  res.send("connected successfully")
+  res.send("connected successfully");
 });
 
 client.connect((err) => {
   const productsCollection = client.db("emaJohn").collection("products");
   const orderCollection = client.db("emaJohn").collection("orders");
-  //   app.post("/addProducts", (req, res) => {
-  //       const product = req.body
-  //     productsCollection.insertMany(product)
-  //     .then(result => {
-  //         console.log(result.insertedCount > 0);
-  //     })
-  //   })
+  app.post("/addProducts", (req, res) => {
+    const product = req.body;
+    productsCollection.insertMany(product).then((result) => {
+      console.log(result.insertedCount > 0);
+    });
+  });
   app.get("/products", (req, res) => {
     productsCollection.find({}).toArray((err, documents) => {
       res.send(documents);
     });
   });
   app.get("/product/:key", (req, res) => {
-    console.log(req.params.key);
     productsCollection
       .find({ key: req.params.key })
       .toArray((err, documents) => {
@@ -43,7 +41,6 @@ client.connect((err) => {
       });
   });
   app.post("/reviewProducts", (req, res) => {
-    console.log(req.body);
     productsCollection
       .find({ key: { $in: req.body } })
       .toArray((err, documents) => {
@@ -57,5 +54,4 @@ client.connect((err) => {
   });
 });
 
-
-
+app.listen(process.env.PORT || port)
