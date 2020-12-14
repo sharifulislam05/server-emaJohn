@@ -15,7 +15,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.get("/", (req, res) => {
-  console.log("connect");
+  res.send("connected successfully")
 });
 
 client.connect((err) => {
@@ -57,4 +57,5 @@ client.connect((err) => {
   });
 });
 
-app.listen(process.env.PORT || port);
+
+
